@@ -1,0 +1,48 @@
+.c-new-todo {
+  display: flex;
+  margin-bottom: 3rem;
+}
+
+.c-new-todo__button {
+  all: unset;
+  margin-top: 0.5rem;
+  margin-left: -0.5rem;
+  margin-right: -0.5rem;
+  padding: 0.5rem;
+  border-radius: 50%;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.c-new-todo__button:hover {
+  background-color: var(--global-neutral-400);
+}
+
+.c-new-todo__button:focus {
+  background-color: var(--global-neutral-700);
+}
+
+.c-new-todo__icon {
+  width: 2rem;
+  height: 2rem;
+  stroke: var(--global-theme-color);
+  stroke-width: 2px;
+}
+
+.c-new-todo__input {
+  width: 100%;
+  padding-left: 1rem;
+}
+
+.c-new-todo__text-input {
+  all: unset;
+  font-size: 2rem;
+  width: 100%;
+}
+
+.c-new-todo__subject {
+  all: unset;
+  background: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+}

@@ -11,13 +11,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 2rem;
-  height: 2rem;
+  width: 1.5rem;
+  height: 1.5rem;
   border-radius: 50%;
 
   border: 1px solid var(--global-theme-color);
 
   background: var(--global-neutral-200);
+  flex-shrink: 0;
 }
 
 .c-todo-input__hidden:checked + .c-todo-input__label .c-todo-input__check {
@@ -44,4 +45,6 @@
 .c-todo-description__category {
   color: var(--global-neutral-700);
   margin: 0;
+  font-size: 0.9rem;
+  font-weight: 500;
 }
