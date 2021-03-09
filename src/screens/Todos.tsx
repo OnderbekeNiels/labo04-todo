@@ -10,6 +10,8 @@ import Todo from "../components/Todo";
 import Row from "../components/Row";
 import Container from "../components/Container";
 
+import { todoStorage } from "../utils/local";
+
 import "../style/components/newTodo.css";
 
 const Todos = () => {
