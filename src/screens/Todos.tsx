@@ -1,12 +1,13 @@
 // Framkework imports
-import React, { useState } from "react";
+import React, { useState, useEffect, FormEvent, ChangeEvent } from "react";
 
 // Third library packages
 
 // Custom / own code
 import AppHeader from "../components/AppHeader";
 import AppFooter from "../components/AppFooter";
-import Todo from "../components/Todo";
+import TodoComponent from "../components/Todo";
+import { Todo } from "../models/Todo";
 import Row from "../components/Row";
 import Container from "../components/Container";
 
@@ -15,15 +16,57 @@ import { todoStorage } from "../utils/local";
 import "../style/components/newTodo.css";
 
 const Todos = () => {
-  const [placeHolderTodos] = useState([{ id: 1 }, { id: 2 }]);
+  const generateRandomId = () => Math.floor(Math.random() * 10000).toString();
+
+  const [todos, setTodos] = useState<Todo[]>(
+    localStorage.getItem("@todos")
+      ? JSON.parse(localStorage.getItem("@todos") as string)
+      : []
+  );
+  const [newTodo, setNewTodo] = useState<Todo>({
+    id: generateRandomId(),
+    title: "",
+    finished: false,
+    category: "default",
+  });
+
+  const saveTodo = () => {
+    if (
+      newTodo.id &&
+      newTodo.title &&
+      newTodo.category &&
+      newTodo.category != "default"
+    ) {
+      //save
+      console.log({ newTodo });
+      setTodos((currentTodos: Todo[]) => {
+        return [...currentTodos, newTodo];
+      });
+
+      setNewTodo({
+        id: generateRandomId(),
+        finished: false,
+        title: "",
+        category: newTodo.category,
+      });
+    } else {
+      console.warn("something does not work", { newTodo });
+    }
+  };
+
+  useEffect(() => {
+    const todosToSave: Todo[] = todos.filter((todo: Todo) => !todo.finished);
+    localStorage.setItem("@todos", JSON.stringify(todosToSave));
+  }, [todos]);
+
   return (
     <main>
-      <AppHeader />
+      <AppHeader todosLeft={todos.length} />
       <Row>
         <Container>
           {/* insert todo */}
           <div className='c-new-todo'>
-            <button className='c-new-todo__button'>
+            <button className='c-new-todo__button' onClick={saveTodo}>
               <svg
                 className='c-new-todo__icon'
                 viewBox='0 0 24 24'
@@ -36,6 +79,14 @@ const Todos = () => {
             </button>
             <div className='c-new-todo__input'>
               <input
+                value={newTodo?.title}
+                onInput={(e: FormEvent) => {
+                  setNewTodo((oldTodo: Todo) => {
+                    const inputElement = e.target as HTMLInputElement;
+                    oldTodo.title = inputElement.value;
+                    return { ...oldTodo };
+                  });
+                }}
                 className='c-new-todo__text-input'
                 type='text'
                 placeholder='Enter new task here.'
@@ -43,7 +94,25 @@ const Todos = () => {
                 id=''
               />
               <div>
-                <select className='c-new-todo__subject' name='' id=''>
+                <select
+                  value={newTodo?.category}
+                  className='c-new-todo__subject'
+                  name='category'
+                  id='category'
+                  onChange={(e: FormEvent) => {
+                    setNewTodo((oldTodo: Todo) => {
+                      const inputElement = e.target as HTMLSelectElement;
+                      oldTodo.category =
+                        inputElement.options[
+                          inputElement.options.selectedIndex
+                        ].value;
+                      return { ...oldTodo };
+                    });
+                  }}
+                >
+                  <option disabled value='default'>
+                    Pick a category
+                  </option>
                   <option value='hobby'>Hobby</option>
                   <option value='school'>School</option>
                   <option value='work'>Work</option>
@@ -52,8 +121,23 @@ const Todos = () => {
             </div>
           </div>
 
-          {placeHolderTodos.map((t) => (
-            <Todo />
+          {todos.map((t) => (
+            <TodoComponent
+              key={t.id}
+              todo={t}
+              onTodoChange={(e: ChangeEvent) => {
+                const target = e.target as HTMLInputElement;
+                setTodos((oldTodos: Todo[]) => {
+                  oldTodos.map((currentTodo) => {
+                    if (currentTodo.id === t.id)
+                      currentTodo.finished = target.checked;
+                    return currentTodo;
+                  });
+                  return [...oldTodos];
+                });
+                t.finished = target.checked;
+              }}
+            />
           ))}
         </Container>
       </Row>

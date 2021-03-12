@@ -1,5 +1,5 @@
 // todo: how to keep track of todos in localstorage?
-import ToDo from "../models/Todo";
+import { Todo } from "../models/Todo";
 
 // const localTodos = (function () {
 //   // Deze iife || self invocing function maakt een 'state' aan en is dus een closure.
@@ -17,7 +17,7 @@ import ToDo from "../models/Todo";
 // })();
 
 export class todoStorage {
-  public todos: ToDo[] = [];
+  public todos: Todo[] = [];
 
   private storageKey: string = "TODOS";
 
@@ -31,7 +31,7 @@ export class todoStorage {
     localStorage.setItem(this.storageKey, JSON.stringify(this.todos));
   }
 
-  public InsertToDo(t: ToDo): void {
+  public InsertToDo(t: Todo): void {
     this.todos.push(t);
     this.syncTodos();
   }

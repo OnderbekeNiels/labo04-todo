@@ -1,17 +1,29 @@
-import React from "react";
+import React, { ChangeEvent } from "react";
 
 import "../style/components/todo.css";
+import { Todo as TodoModel } from "../models/Todo";
 
-const Todo = () => {
+const Todo = ({
+  todo,
+  onTodoChange,
+}: {
+  todo: TodoModel;
+  onTodoChange: Function;
+}) => {
+
   return (
     <div className='c-todo'>
       <input
         className='o-hide-accessible c-todo-input__hidden'
         type='checkbox'
         name='todos'
-        id='duif'
+        id={todo.id}
+        checked = {todo.finished}
+        onChange={(e: ChangeEvent) => {
+          onTodoChange(e);
+        }}
       />
-      <label className='c-todo-input__label' htmlFor='duif'>
+      <label className='c-todo-input__label' htmlFor={todo.id}>
         <div className='c-todo-input__check'>
           <svg
             className='c-todo-input__icon'
@@ -26,8 +38,8 @@ const Todo = () => {
         </div>
 
         <div className='c-todo-description'>
-          <p className='c-todo-description__title'>De duiven eten geven</p>
-          <p className='c-todo-description__category'>Hobby</p>
+          <p className='c-todo-description__title'>{todo.title}</p>
+          <p className='c-todo-description__category'>{todo.category}</p>
         </div>
       </label>
     </div>
